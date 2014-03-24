@@ -22,6 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name="com.foundation.restful.RestFulDataManager" >
+            <intent-filter>
+                <action android:name="com.foundation.restful.RestFulDataManager" >
+                </action>
+            </intent-filter>
+        </service>
+        <service android:name="com.ovenbits.chucknorris.TestService" >
+        </service>
     </application>
 
 </manifest>
