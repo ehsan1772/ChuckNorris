@@ -1,6 +1,11 @@
 package com.ovenbits.chucknorris;
 
 import com.foundation.restful.RestFulDataManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
+import data.Joke;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -15,31 +20,64 @@ import android.view.Menu;
 public class MainActivity extends Activity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private String url = "http://api.icndb.com/jokes/15";
+	private String url2 = "http://api.icndb.com/jokes/16";
+	private String url3 = "http://api.icndb.com/jokes/17";
+	private String url4 = "http://api.icndb.com/jokes/18";
+	private String url5 = "http://api.icndb.com/jokes/19";
+	private String url6 = "http://api.icndb.com/jokes/20";
+	private String url7 = "http://api.icndb.com/jokes/21";
+	private String url8 = "http://api.icndb.com/jokes/22";
 	
-	BroadcastReceiver downloadUpdateReceiver = new BroadcastReceiver() {
-		
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (intent.hasExtra(RestFulDataManager.REF_KEY)) {
-				int refKey = intent.getExtras().getInt(RestFulDataManager.REF_KEY);
-				if (refKey == url.hashCode()) {
-					Log.d(TAG, "Data is available for request id " + refKey);
-					String result = RestFulDataManager.getInstance().getData(refKey, String.class);
-				}
-			}
-			
-		}
-	};
+	String fakeResult= "{\"type\": \"success\"}";
+	
+	private BroadcastReceiver downloadUpdateReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		createReceiver();
 		IntentFilter filter = new IntentFilter();
-		filter.addAction("RESULT");
+		filter.addAction("com.ovenbits.chucknorris.RESULT");
 		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(downloadUpdateReceiver, filter);
 		
-		fetchData();
+		fetchData(url);
+		fetchData(url2);
+		fetchData(url3);
+		fetchData(url4);
+		fetchData(url5);
+		fetchData(url6);
+		fetchData(url7);
+		fetchData(url8);
+	}
+	
+
+	private void createReceiver() {
+		downloadUpdateReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.hasExtra(RestFulDataManager.REF_KEY)) {
+					int refKey = intent.getExtras().getInt(RestFulDataManager.REF_KEY);
+			//		if (refKey == url.hashCode()) {
+					String result = RestFulDataManager.getInstance().getData(refKey, String.class);
+					Log.d(TAG, "Result is: " + result);
+					
+						Gson gson = new GsonBuilder().create();
+						try {
+						Joke joke = gson.fromJson(result, Joke.class);
+						} catch(JsonSyntaxException e) {
+							Log.e(TAG, "Wrong syntax : " + result);
+						}
+								
+						Log.d(TAG, "Data is available for request id " + refKey);
+
+			//		}
+				}
+				
+			}
+		};
 	}
 	
 	
@@ -51,9 +89,9 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	private void fetchData() {
+	private void fetchData(String url) {
 		Intent intent = new Intent(this, RestFulDataManager.class);
-		intent.putExtra(RestFulDataManager.REQUESTED_URL, "Test");
+		intent.putExtra(RestFulDataManager.REQUESTED_URL, url);
 		startService(intent);
 	}
 

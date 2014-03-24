@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="18"
         android:targetSdkVersion="19" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -29,8 +30,7 @@
                 </action>
             </intent-filter>
         </service>
-        <service android:name="com.ovenbits.chucknorris.TestService" >
-        </service>
+        
     </application>
 
 </manifest>
