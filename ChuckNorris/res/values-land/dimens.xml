@@ -4,10 +4,11 @@
          Customize dimensions originally defined in res/values/dimens.xml (such as
          screen margins) for sw600dp devices (e.g. 7" tablets) here.
     -->
-    <dimen name="joke_fragment_width">400dp</dimen>
-    <dimen name="joke_fragment_height">200dp</dimen>
+    <dimen name="joke_fragment_width">300dp</dimen>
+    <dimen name="joke_fragment_height">180dp</dimen>
     
-        <dimen name="joke_fragment_margin_bottom">150dp</dimen>
+    <dimen name="joke_fragment_margin_bottom">30dp</dimen>
+    
     <!-- Text Size -->
     <dimen name="joke_textsize">20sp</dimen>
 

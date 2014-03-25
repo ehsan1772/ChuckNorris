@@ -27,11 +27,16 @@ import android.widget.TextView;
 
 public class JokeFragment extends Fragment {
 	public static String TAG =  JokeFragment.class.getSimpleName();
-	private JokeActivity jokeActivity;
 	private TextView jokeTextView;
 	private ProgressBar jokeProgressBar;
 	private int slideInDuration;
 	private int animationInDuration;
+	
+	public final static int STATUS_LOADING = 1;
+	public final static int STATUS_RESTING = 0;
+	
+	private int status = STATUS_RESTING;
+	
 	
 	private int jokeCount;
 	private Joke joke;
@@ -71,6 +76,18 @@ public class JokeFragment extends Fragment {
 		if (savedInstanceState == null) {
 			fetchData(jokeCountUrl);
 		}
+	}
+	
+	public void refresh() {
+		status = STATUS_LOADING;
+		jokeProgressBar.setVisibility(View.VISIBLE);
+		jokeTextView.setText("");
+		joke = null;
+		fetchData(jokeCountUrl);
+	}
+	
+	public int getStatus() {
+		return status;
 	}
 		
 	@Override
@@ -115,26 +132,13 @@ public class JokeFragment extends Fragment {
 		super.onStart();
 	}
 	
-	@Override
-	public void onAttach(Activity activity) {
-		try {
-			jokeActivity = (JokeActivity) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement JokeActivity");
-		}
-		super.onAttach(activity);
-	}
-	
-	public interface JokeActivity {
-		
-	}
-	
 	
 	private void showTheJoke() {
 		if (slideAnimationIsFinished && joke != null) {
 			jokeProgressBar.setVisibility(View.INVISIBLE);
 			jokeTextView.setText(joke.getValue().getJoke());
 		}	
+		status = STATUS_RESTING;
 	}
 	
 	private void initiateReceiver() {
