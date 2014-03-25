@@ -4,11 +4,13 @@ import com.foundation.restful.RestFulDataManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.ovenbits.chucknorris.JokeFragment.JokeActivity;
 
 import data.Joke;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +19,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements JokeActivity{
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private String url = "http://api.icndb.com/jokes/15";
 	private String url2 = "http://api.icndb.com/jokes/16";
@@ -28,14 +30,18 @@ public class MainActivity extends Activity {
 	private String url7 = "http://api.icndb.com/jokes/21";
 	private String url8 = "http://api.icndb.com/jokes/22";
 	
+	private JokeFragment jokeFragment;
+	
 	String fakeResult= "{\"type\": \"success\"}";
 	
 	private BroadcastReceiver downloadUpdateReceiver;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		jokeFragment = new JokeFragment();
 		
 		createReceiver();
 		IntentFilter filter = new IntentFilter();
@@ -50,6 +56,14 @@ public class MainActivity extends Activity {
 		fetchData(url6);
 		fetchData(url7);
 		fetchData(url8);
+	}
+	
+	@Override
+	protected void onResume() {
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.joke_fragment_container, jokeFragment, JokeFragment.TAG);
+		transaction.commit();
+		super.onResume();
 	}
 	
 

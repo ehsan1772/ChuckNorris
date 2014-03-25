@@ -6,14 +6,37 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class JokeFragment extends Fragment {
-	JokeActivity jokeActivity;
+	public static String TAG =  JokeFragment.class.getSimpleName();
+	private JokeActivity jokeActivity;
+	private TextView jokeTextView;
+	private ProgressBar jokeProgressBar;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.joke_fragment, container, true);
+		jokeTextView = (TextView) view.findViewById(R.id.jokeTextView);
+		jokeProgressBar = (ProgressBar) view.findViewById(R.id.jokeProgressBar);
+		return view;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume(); 
+		getView().getLeft();
+		getView().getTranslationX();
+		getView().getX();
+		
+	}
+	
+	@Override
+	public void onStart() {
 		// TODO Auto-generated method stub
-		return super.onCreateView(inflater, container, savedInstanceState);
+		super.onStart();
 	}
 	
 	@Override
