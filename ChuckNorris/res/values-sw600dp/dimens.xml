@@ -6,7 +6,9 @@
     -->
     <dimen name="joke_fragment_width">300dp</dimen>
     <dimen name="joke_fragment_height">200dp</dimen>
-    <color name="main_background">#FF8000</color>
-    <color name="joke_fragment_background">#C0C0C0</color>
+    
+    <!-- Text Size -->
+    <dimen name="joke_textsize">20sp</dimen>
+
 
 </resources>

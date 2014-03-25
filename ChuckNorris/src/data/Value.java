@@ -10,27 +10,25 @@ import com.google.gson.annotations.SerializedName;
 public class Value {
 
 	@SerializedName("id")
-	int id;
+	private int id;
 	
 	@SerializedName("joke")
-	String joke;
+	private String joke;
 	
 	@SerializedName("categories")
-	List<String> categories = new ArrayList<String>(4);
+	private List<String> categories = new ArrayList<String>(4);
 	
-//	
-//	public int getId() {
-//		return id;
-//	}
-//	public void setId(int id) {
-//		this.id = id;
-//	}
-//	public String getJoke() {
-//		return joke;
-//	}
-//	public void setJoke(String joke) {
-//		this.joke = joke;
-//	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getJoke() {
+		return joke;
+	}
 	
+	public List<String> getCategories() {
+		return categories;
+	}
 
 }

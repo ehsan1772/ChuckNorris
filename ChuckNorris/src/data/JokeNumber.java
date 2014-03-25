@@ -2,18 +2,17 @@ package data;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Joke {
+public class JokeNumber {
 	@SerializedName("type")
 	private String type;
 	@SerializedName("value")
-	private Value value;
+	private int value;
 	
-	public Value getValue() {
-		return value;
-	}
-
 	public String getType() {
 		return type;
+	}
+	public int getValue() {
+		return value;
 	}
 
 }

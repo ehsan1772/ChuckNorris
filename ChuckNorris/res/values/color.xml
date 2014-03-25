@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Colors -->
+
+        
+    <color name="joke_color">#FF3333</color>
+
+
+    <color name="main_background">#FF9900</color>
+    <color name="joke_fragment_background">#C0C0C0</color>
+
+</resources>

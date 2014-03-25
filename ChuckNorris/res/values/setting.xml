@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <!-- Animation times -->
+    <item name="joke_slie_duration" type="integer">500</item>
+    <item name="joke_in_duration" type="integer">1000</item>
+
+    <!-- URLs -->
+    <string name="joke_count_url">http://api.icndb.com/jokes/count</string>
+    <string name="joke_base_url">http://api.icndb.com/jokes/</string>
+
+</resources>
