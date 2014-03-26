@@ -4,6 +4,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.Html;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -24,7 +26,7 @@ public class Value {
 	}
 
 	public String getJoke() {
-		return joke;
+		return Html.escapeHtml(joke);
 	}
 	
 	public List<String> getCategories() {

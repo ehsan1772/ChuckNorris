@@ -1,5 +1,7 @@
 package com.ovenbits.chucknorris;
 
+import views.AnimatedTextView;
+
 import com.foundation.restful.RestFulDataManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,7 +29,7 @@ import android.widget.TextView;
 
 public class JokeFragment extends Fragment {
 	public static String TAG =  JokeFragment.class.getSimpleName();
-	private TextView jokeTextView;
+	private AnimatedTextView jokeTextView;
 	private ProgressBar jokeProgressBar;
 	private int slideInDuration;
 	private int animationInDuration;
@@ -93,7 +95,7 @@ public class JokeFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.joke_fragment, container, false);
-		jokeTextView = (TextView) view.findViewById(R.id.jokeTextView);
+		jokeTextView = (AnimatedTextView) view.findViewById(R.id.jokeTextView);
 		jokeProgressBar = (ProgressBar) view.findViewById(R.id.jokeProgressBar);
 		return view;
 	}
@@ -103,7 +105,7 @@ public class JokeFragment extends Fragment {
 		super.onResume(); 
 		float delta = getResources().getDimension(R.dimen.joke_fragment_width);
 		Animator animator = ObjectAnimator.ofFloat(getView(), View.X, delta, 0);
-		animator.setDuration(1000);
+		animator.setDuration(slideInDuration);
 		animator.addListener(animatorListener);
 		slideAnimationIsFinished = false;
 		animator.start();
@@ -136,7 +138,7 @@ public class JokeFragment extends Fragment {
 	private void showTheJoke() {
 		if (slideAnimationIsFinished && joke != null) {
 			jokeProgressBar.setVisibility(View.INVISIBLE);
-			jokeTextView.setText(joke.getValue().getJoke());
+			jokeTextView.setAnimatedText(joke.getValue().getJoke(), 50);
 		}	
 		status = STATUS_RESTING;
 	}

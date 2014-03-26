@@ -1,9 +1,14 @@
 package com.ovenbits.chucknorris;
 
+import notification.NotificationService;
 import shake.ShakeListener;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -18,6 +23,7 @@ public class MainActivity extends Activity implements ShakeListener.OnShakeListe
 		setContentView(R.layout.activity_main);
 		shaker = new ShakeListener(this);
 		shaker.setOnShakeListener(this);
+		startNotificationTimer();
 	}
 	
 	@Override
@@ -55,6 +61,9 @@ public class MainActivity extends Activity implements ShakeListener.OnShakeListe
 		}
 	}
 
+	private void startNotificationTimer() {
+		NotificationService.setTimer(this);
+	}
 
 
 }
