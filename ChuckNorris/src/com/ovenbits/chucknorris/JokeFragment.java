@@ -42,7 +42,7 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 	private final static int ANIMATION_ENDED = 2;
 	
 	private int status = STATUS_RESTING;
-	
+	private int parentWidth;
 	
 	private int jokeCount;
 	private Joke joke;
@@ -54,6 +54,9 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 	
 	private BroadcastReceiver notificationReciever;
 	private int slideAnimationStatus = 0;
+	private Bundle savedInstance;
+	
+	private int refKey;
 	
 	public static JokeFragment getInstance() {
 		JokeFragment f = new JokeFragment();
@@ -61,7 +64,7 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 		Bundle args = new Bundle();
 		//add parameters here
 		f.setArguments(args);
-		f.setRetainInstance(true);
+	//	f.setRetainInstance(true);
 		return f;
 	}
 	
@@ -79,17 +82,12 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("com.ovenbits.chucknorris.RESULT");
 		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(notificationReciever, filter);
-
-	}
-	
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.d(TAG, "onActivityCreated");
-		super.onActivityCreated(savedInstanceState);
-		if (savedInstanceState == null) {
+		if (savedInstanceState == null || savedInstanceState.getInt("KEY") == 0) {
 			fetchData(jokeCountUrl);
+		} else {
+			savedInstance = savedInstanceState;
 		}
+
 	}
 	
 	public void refresh() {
@@ -111,19 +109,37 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 		jokeTextView = (AnimatedTextView) view.findViewById(R.id.jokeTextView);
 		jokeTextView.setListener(this);
 		jokeProgressBar = (ProgressBar) view.findViewById(R.id.jokeProgressBar);
+		parentWidth = container.getWidth();
+		if (savedInstance != null) {
+			slideAnimationStatus = ANIMATION_ENDED;
+			refKey = savedInstanceState.getInt("KEY");
+			joke = getJoke(refKey);
+			jokeTextView.setText(joke.getValue().getJoke());
+			jokeTextView.setVisibility(View.VISIBLE);
+			jokeProgressBar.setVisibility(View.INVISIBLE);
+		}
 		return view;
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putInt("KEY", refKey);
+		super.onSaveInstanceState(outState);
 	}
 	
 	@Override
 	public void onResume() {
 		Log.d(TAG, "onResume");
 		super.onResume(); 
-		float delta = getResources().getDimension(R.dimen.joke_fragment_width);
-		Animator animator = ObjectAnimator.ofFloat(getView(), View.X, delta, 0);
-		animator.setDuration(slideInDuration);
-		animator.addListener(animatorListener);
-		slideAnimationStatus = ANIMATION_STARTED;
-		animator.start();
+		if (slideAnimationStatus == ANIMATION_NOT_STARTED) {
+			slideAnimationStatus = ANIMATION_STARTED;
+			
+			float delta = getResources().getDimension(R.dimen.joke_fragment_width);
+			Animator animator = ObjectAnimator.ofFloat(getView(), View.X, delta, 0);
+			animator.setDuration(slideInDuration);
+			animator.addListener(animatorListener);
+			animator.start();
+		}
 	}
 	
 	private AnimatorListener animatorListener = new AnimatorListener() {
@@ -164,15 +180,16 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				if (intent.hasExtra(RestFulDataManager.REF_KEY)) {
-					int refKey = intent.getExtras().getInt(RestFulDataManager.REF_KEY);
-					Log.d(TAG, "Data is available for request id " + refKey);
-					if (refKey == jokeCountUrl.hashCode()) {
-						jokeCount = getCount(refKey);
+					int refKeyIntent = intent.getExtras().getInt(RestFulDataManager.REF_KEY);
+					Log.d(TAG, "Data is available for request id " + refKeyIntent);
+					if (refKeyIntent == jokeCountUrl.hashCode()) {
+						jokeCount = getCount(refKeyIntent);
 						jokeUrl= jokeBaseUrl + getRandomInt(jokeCount);
 						fetchData(jokeUrl);
 					}
-					if (!jokeUrl.isEmpty() && refKey == jokeUrl.hashCode()) {
-						if (joke != getJoke(refKey)) {
+					if (!jokeUrl.isEmpty() && refKeyIntent == jokeUrl.hashCode()) {
+						if (joke != getJoke(refKeyIntent)) {
+							refKey = refKeyIntent;
 							joke = getJoke(refKey);
 							showTheJoke();
 						}

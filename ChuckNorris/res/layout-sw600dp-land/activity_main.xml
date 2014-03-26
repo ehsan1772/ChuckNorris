@@ -8,18 +8,17 @@
     <RelativeLayout
         android:id="@+id/joke_fragment_container"
         android:layout_width="@dimen/joke_fragment_width"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="150dp"/>
 
     <RelativeLayout
         android:id="@+id/talk_fragment_container"
-        android:layout_width="224dp"
-        android:layout_height="322dp"
-        android:layout_above="@id/joke_fragment_container"
+        android:layout_width="320dp"
+        android:layout_height="460dp"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="30dp" />
+        android:layout_marginLeft="50dp"/>
 
 </RelativeLayout>

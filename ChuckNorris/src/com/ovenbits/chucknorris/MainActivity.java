@@ -23,12 +23,21 @@ public class MainActivity extends Activity implements ShakeListener.OnShakeListe
 		shaker = new ShakeListener(this);
 		shaker.setOnShakeListener(this);
 		startNotificationTimer();
+		
+		if (savedInstanceState == null) {
+			addTalkFragment();
+			addJokeFragment();
+		} else {
+			talkingChuck = (TalkingChuck) getFragmentManager().findFragmentByTag(TalkingChuck.TAG);
+			jokeFragment = (JokeFragment) getFragmentManager().findFragmentByTag(JokeFragment.TAG);
+		}
+		
+		jokeFragment.setListener(this);
 	}
 	
 	@Override
 	protected void onResume() {
-		addJokeFragment();
-		addTalkFragment();
+
 		shaker.resume();
 		super.onResume();
 	}
@@ -50,7 +59,7 @@ public class MainActivity extends Activity implements ShakeListener.OnShakeListe
 		if (jokeFragment == null) {
 			jokeFragment = JokeFragment.getInstance();
 		}
-		jokeFragment.setListener(this);
+		
 		transaction.replace(R.id.joke_fragment_container, jokeFragment, JokeFragment.TAG);
 		transaction.commit();
 	}
@@ -59,13 +68,6 @@ public class MainActivity extends Activity implements ShakeListener.OnShakeListe
 	protected void onPause() {
 		shaker.pause();
 		super.onPause();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 
 	@Override
