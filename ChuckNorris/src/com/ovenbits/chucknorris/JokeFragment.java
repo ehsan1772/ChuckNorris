@@ -1,14 +1,6 @@
 package com.ovenbits.chucknorris;
 
 import views.AnimatedTextView;
-
-import com.foundation.restful.RestFulDataManager;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-
-import data.Joke;
-import data.JokeNumber;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
@@ -25,17 +17,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-public class JokeFragment extends Fragment {
+import com.foundation.restful.RestFulDataManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
+import data.Joke;
+import data.JokeNumber;
+
+public class JokeFragment extends Fragment implements AnimatedTextView.TextAnimationListener{
 	public static String TAG =  JokeFragment.class.getSimpleName();
 	private AnimatedTextView jokeTextView;
 	private ProgressBar jokeProgressBar;
 	private int slideInDuration;
 	private int animationInDuration;
+	private AnimationListener listener;
 	
 	public final static int STATUS_LOADING = 1;
 	public final static int STATUS_RESTING = 0;
+	
+	private final static int ANIMATION_NOT_STARTED = 0;
+	private final static int ANIMATION_STARTED = 1;
+	private final static int ANIMATION_ENDED = 2;
 	
 	private int status = STATUS_RESTING;
 	
@@ -49,7 +53,7 @@ public class JokeFragment extends Fragment {
 	private String jokeBaseUrl;
 	
 	private BroadcastReceiver notificationReciever;
-	private boolean slideAnimationIsFinished = false;
+	private int slideAnimationStatus = 0;
 	
 	public static JokeFragment getInstance() {
 		JokeFragment f = new JokeFragment();
@@ -65,6 +69,7 @@ public class JokeFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(TAG, "onCreate");
 		slideInDuration = getResources().getInteger(R.integer.joke_slie_duration);
 		animationInDuration = getResources().getInteger(R.integer.joke_in_duration);
 		jokeCountUrl = getResources().getString(R.string.joke_count_url);
@@ -74,14 +79,21 @@ public class JokeFragment extends Fragment {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("com.ovenbits.chucknorris.RESULT");
 		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(notificationReciever, filter);
-		
+
+	}
+	
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.d(TAG, "onActivityCreated");
+		super.onActivityCreated(savedInstanceState);
 		if (savedInstanceState == null) {
 			fetchData(jokeCountUrl);
 		}
 	}
 	
 	public void refresh() {
-		status = STATUS_LOADING;
+		Log.d(TAG, "refresh");
 		jokeProgressBar.setVisibility(View.VISIBLE);
 		jokeTextView.setText("");
 		joke = null;
@@ -94,20 +106,23 @@ public class JokeFragment extends Fragment {
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.d(TAG, "onCreateView");
 		View view = inflater.inflate(R.layout.joke_fragment, container, false);
 		jokeTextView = (AnimatedTextView) view.findViewById(R.id.jokeTextView);
+		jokeTextView.setListener(this);
 		jokeProgressBar = (ProgressBar) view.findViewById(R.id.jokeProgressBar);
 		return view;
 	}
 	
 	@Override
 	public void onResume() {
+		Log.d(TAG, "onResume");
 		super.onResume(); 
 		float delta = getResources().getDimension(R.dimen.joke_fragment_width);
 		Animator animator = ObjectAnimator.ofFloat(getView(), View.X, delta, 0);
 		animator.setDuration(slideInDuration);
 		animator.addListener(animatorListener);
-		slideAnimationIsFinished = false;
+		slideAnimationStatus = ANIMATION_STARTED;
 		animator.start();
 	}
 	
@@ -120,7 +135,7 @@ public class JokeFragment extends Fragment {
 		
 		@Override
 		public void onAnimationEnd(Animator animation) {
-			slideAnimationIsFinished = true;
+			slideAnimationStatus = ANIMATION_ENDED;
 			showTheJoke();
 		}
 
@@ -130,19 +145,20 @@ public class JokeFragment extends Fragment {
 	
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
+		Log.d(TAG, "onStart");
 		super.onStart();
 	}
 	
 	
 	private void showTheJoke() {
-		if (slideAnimationIsFinished && joke != null) {
+		if (slideAnimationStatus == ANIMATION_ENDED && joke != null) {
 			jokeProgressBar.setVisibility(View.INVISIBLE);
 			jokeTextView.setAnimatedText(joke.getValue().getJoke(), 50);
 		}	
-		status = STATUS_RESTING;
+		
 	}
-	
+
+
 	private void initiateReceiver() {
 		notificationReciever = new BroadcastReceiver() {
 			@Override
@@ -195,6 +211,7 @@ public class JokeFragment extends Fragment {
 			return joke;
 		} catch(JsonSyntaxException e) {
 			Log.e(TAG, "Wrong syntax : " + result);
+			refresh();
 		}
 					
 		return null;
@@ -202,6 +219,8 @@ public class JokeFragment extends Fragment {
 	
 	
 	private void fetchData(String url) {
+		Log.d(TAG, "fetchData");
+		status = STATUS_LOADING;
 		Intent intent = new Intent(getActivity(), RestFulDataManager.class);
 		intent.putExtra(RestFulDataManager.REQUESTED_URL, url);
 		getActivity().startService(intent);
@@ -209,8 +228,41 @@ public class JokeFragment extends Fragment {
 	
 	@Override
 	public void onDestroy() {
+		Log.d(TAG, "onDestroy");
 		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(notificationReciever);
 		super.onDestroy();
+	}
+	
+	public AnimationListener getListener() {
+		return listener;
+	}
+
+
+	public void setListener(AnimationListener listener) {
+		this.listener = listener;
+	}
+
+	public interface AnimationListener {
+		public void textAnimationStrated();
+		public void textAnimationEnded();
+	}
+
+	@Override
+	public void textAnimationStrated() {
+		if (listener != null) {
+			listener.textAnimationStrated();
+		}
+		
+	}
+
+
+	@Override
+	public void textAnimationEnded() {
+		status = STATUS_RESTING;
+		if (listener != null) {
+			listener.textAnimationEnded();
+		}
+		
 	}
 
 }

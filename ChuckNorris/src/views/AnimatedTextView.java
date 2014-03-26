@@ -3,17 +3,19 @@ package views;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.TextView;
 
 public class AnimatedTextView extends TextView {
+	public static final String TAG = AnimatedTextView.class.getSimpleName();
 	private Handler mainHandler;
+	private TextAnimationListener listener;
 	char[] textArray;
 
 	public AnimatedTextView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		initialize(context);
 	}
-
 
 	public AnimatedTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -24,21 +26,24 @@ public class AnimatedTextView extends TextView {
 		super(context);
 		initialize(context);
 	}
-	
+
 	private void initialize(Context context) {
 		mainHandler = new Handler(context.getMainLooper());
-		
+
 	}
-	
+
 	public void setAnimatedText(final String text, final long interval) {
 		textArray = new char[text.length()];
-		
+
 		Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
-				for(int i = 0 ; i < textArray.length ; i++) {
+				Log.d(TAG, "Starting Text Animation");
+				animationStarted();
+				for (int i = 0; i < textArray.length; i++) {
 					text.getChars(0, i, textArray, 0);
-					Runnable forMainThread = setTextRunnable(new String(textArray));
+					Runnable forMainThread = setTextRunnable(new String(
+							textArray));
 					mainHandler.post(forMainThread);
 					try {
 						Thread.sleep(interval);
@@ -47,15 +52,41 @@ public class AnimatedTextView extends TextView {
 						e.printStackTrace();
 					}
 				}
-				
+				Log.d(TAG, "Text Animation Finished");
+				animationEnded();
 			}
+
 		};
-		
+
 		Thread thread = new Thread(runnable);
 		thread.start();
-		
+
 	}
-	
+
+	private void animationEnded() {
+		if (listener != null) {
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					listener.textAnimationEnded();
+				}
+			};
+			mainHandler.post(runnable);
+		}
+	}
+
+	private void animationStarted() {
+		if (listener != null) {
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					listener.textAnimationStrated();
+				}
+			};
+			mainHandler.post(runnable);
+		}
+	}
+
 	private Runnable setTextRunnable(final String chars) {
 		Runnable result = new Runnable() {
 			@Override
@@ -65,7 +96,19 @@ public class AnimatedTextView extends TextView {
 		};
 		return result;
 	}
-	
 
+	public TextAnimationListener getListener() {
+		return listener;
+	}
+
+	public void setListener(TextAnimationListener listener) {
+		this.listener = listener;
+	}
+
+	public interface TextAnimationListener {
+		public void textAnimationStrated();
+
+		public void textAnimationEnded();
+	}
 
 }

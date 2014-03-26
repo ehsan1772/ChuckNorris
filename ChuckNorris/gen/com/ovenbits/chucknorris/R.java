@@ -8,7 +8,17 @@
 package com.ovenbits.chucknorris;
 
 public final class R {
+    public static final class anim {
+        public static final int talkingchuck=0x7f040000;
+    }
     public static final class attr {
+    }
+    public static final class color {
+        /**  Colors 
+         */
+        public static final int joke_color=0x7f050000;
+        public static final int joke_fragment_background=0x7f050002;
+        public static final int main_background=0x7f050001;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -17,25 +27,77 @@ public final class R {
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f040000;
-        public static final int activity_vertical_margin=0x7f040001;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
+        public static final int joke_fragment_height=0x7f060003;
+        public static final int joke_fragment_margin_bottom=0x7f060004;
+        /** 
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw600dp devices (e.g. 7" tablets) here.
+
+    
+
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw600dp devices (e.g. 7" tablets) here.
+
+
+    
+ Joke Fragment 
+
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw600dp devices (e.g. 7" tablets) here.
+
+    
+         */
+        public static final int joke_fragment_width=0x7f060002;
+        /**  Text Size 
+ Text Size 
+ Text Size 
+ Text Size 
+         */
+        public static final int joke_textsize=0x7f060005;
+        public static final int talk_fragment_height=0x7f060007;
+        public static final int talk_fragment_margin_Bottom=0x7f060008;
+        public static final int talk_fragment_margin_left=0x7f060009;
+        /**  Talk Fragment 
+         */
+        public static final int talk_fragment_width=0x7f060006;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int chuck1=0x7f020000;
+        public static final int chuck2=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f080000;
+        public static final int action_settings=0x7f0b0005;
+        public static final int jokeProgressBar=0x7f0b0004;
+        public static final int jokeTextView=0x7f0b0003;
+        public static final int joke_fragment_container=0x7f0b0000;
+        public static final int talk_fragment_container=0x7f0b0001;
+        public static final int talking_image=0x7f0b0002;
+    }
+    public static final class integer {
+        public static final int joke_in_duration=0x7f070001;
+        /**  Animation times 
+         */
+        public static final int joke_slie_duration=0x7f070000;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
+        public static final int chuck_talking=0x7f030001;
+        public static final int joke_fragment=0x7f030002;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
+        public static final int main=0x7f0a0000;
     }
     public static final class string {
-        public static final int action_settings=0x7f050001;
-        public static final int app_name=0x7f050000;
-        public static final int hello_world=0x7f050002;
+        public static final int action_settings=0x7f080003;
+        public static final int app_name=0x7f080002;
+        public static final int hello_world=0x7f080004;
+        public static final int joke_base_url=0x7f080001;
+        /**  URLs 
+         */
+        public static final int joke_count_url=0x7f080000;
     }
     public static final class style {
         /** 
@@ -59,10 +121,11 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f090001;
+        public static final int JokeText=0x7f090002;
     }
 }

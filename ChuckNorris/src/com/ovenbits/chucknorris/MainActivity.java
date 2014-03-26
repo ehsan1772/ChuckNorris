@@ -3,19 +3,18 @@ package com.ovenbits.chucknorris;
 import notification.NotificationService;
 import shake.ShakeListener;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 
 
-public class MainActivity extends Activity implements ShakeListener.OnShakeListener{
+public class MainActivity extends Activity implements ShakeListener.OnShakeListener, JokeFragment.AnimationListener {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private ShakeListener shaker;
+	private JokeFragment jokeFragment;
+	private TalkingChuck talkingChuck;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,16 +27,32 @@ public class MainActivity extends Activity implements ShakeListener.OnShakeListe
 	
 	@Override
 	protected void onResume() {
-		Fragment existingFragment = getFragmentManager().findFragmentByTag(JokeFragment.TAG);
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		if (existingFragment == null) {
-			transaction.replace(R.id.joke_fragment_container, JokeFragment.getInstance(), JokeFragment.TAG);
-		} else {
-			transaction.replace(R.id.joke_fragment_container, existingFragment, JokeFragment.TAG);
-		}
-		transaction.commit();
+		addJokeFragment();
+		addTalkFragment();
 		shaker.resume();
 		super.onResume();
+	}
+	
+	private void addTalkFragment() {
+		talkingChuck = (TalkingChuck) getFragmentManager().findFragmentByTag(TalkingChuck.TAG);
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		if (talkingChuck == null) {
+			talkingChuck = TalkingChuck.getInstance();
+		}
+
+		transaction.replace(R.id.talk_fragment_container, talkingChuck, TalkingChuck.TAG);
+		transaction.commit();
+	}
+
+	private void addJokeFragment() {
+		jokeFragment = (JokeFragment) getFragmentManager().findFragmentByTag(JokeFragment.TAG);
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		if (jokeFragment == null) {
+			jokeFragment = JokeFragment.getInstance();
+		}
+		jokeFragment.setListener(this);
+		transaction.replace(R.id.joke_fragment_container, jokeFragment, JokeFragment.TAG);
+		transaction.commit();
 	}
 	
 	@Override
@@ -55,7 +70,7 @@ public class MainActivity extends Activity implements ShakeListener.OnShakeListe
 
 	@Override
 	public void onShake() {
-		JokeFragment jokeFragment = (JokeFragment) getFragmentManager().findFragmentByTag(JokeFragment.TAG);
+		jokeFragment = (JokeFragment) getFragmentManager().findFragmentByTag(JokeFragment.TAG);
 		if (jokeFragment != null && jokeFragment.getStatus() != JokeFragment.STATUS_LOADING) {
 			jokeFragment.refresh();
 		}
@@ -63,6 +78,18 @@ public class MainActivity extends Activity implements ShakeListener.OnShakeListe
 
 	private void startNotificationTimer() {
 		NotificationService.setTimer(this);
+	}
+
+	@Override
+	public void textAnimationStrated() {
+		talkingChuck.talk();
+		
+	}
+
+	@Override
+	public void textAnimationEnded() {
+		talkingChuck.shutUp();
+		
 	}
 
 

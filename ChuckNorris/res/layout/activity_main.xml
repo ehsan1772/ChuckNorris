@@ -1,18 +1,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/main_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_background"
     tools:context=".MainActivity" >
-    
+
     <RelativeLayout
-       android:id="@+id/joke_fragment_container"
-       android:layout_width="@dimen/joke_fragment_width"
-       android:layout_height="@dimen/joke_fragment_height"
+        android:id="@+id/joke_fragment_container"
+        android:layout_width="@dimen/joke_fragment_width"
+        android:layout_height="@dimen/joke_fragment_height"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="100dp"
-        />
-        
+        android:layout_marginBottom="@dimen/joke_fragment_margin_bottom"/>
+
+    <RelativeLayout
+        android:id="@+id/talk_fragment_container"
+        android:layout_width="@dimen/talk_fragment_width"
+        android:layout_height="@dimen/talk_fragment_height"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@id/joke_fragment_container"
+        android:layout_marginBottom="@dimen/talk_fragment_margin_Bottom"
+        android:layout_marginLeft="@dimen/talk_fragment_margin_left"/>
 
 </RelativeLayout>
