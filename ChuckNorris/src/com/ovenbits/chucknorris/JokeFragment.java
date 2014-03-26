@@ -172,8 +172,10 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 						fetchData(jokeUrl);
 					}
 					if (!jokeUrl.isEmpty() && refKey == jokeUrl.hashCode()) {
-						joke = getJoke(refKey);
-						showTheJoke();
+						if (joke != getJoke(refKey)) {
+							joke = getJoke(refKey);
+							showTheJoke();
+						}
 					}
 					
 				}

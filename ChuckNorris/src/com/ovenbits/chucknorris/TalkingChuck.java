@@ -13,6 +13,15 @@ public class TalkingChuck extends Fragment {
 	ImageView jokeView;
 	AnimationDrawable jokeAnimation;
 	
+	public final static int NOT_READY = 0;
+	public final static int READY = 1;
+	public final static int RUNNING = 2;
+	
+	private int status = 0;
+	private boolean hasPendeingAnimation = false;
+
+	
+	
 	public static TalkingChuck getInstance() {
 		TalkingChuck f = new TalkingChuck();
 		
@@ -32,11 +41,34 @@ public class TalkingChuck extends Fragment {
 		return view;
 	}
 	
+	@Override
+	public void onResume() {
+		super.onResume();
+		status = READY;
+		if (hasPendeingAnimation) {
+			talk();
+		}
+		
+	}
+	
 	public void talk() {
-		jokeAnimation.start();
+		if (status == READY) { 
+			jokeAnimation.start();
+			status = RUNNING;
+			hasPendeingAnimation = false;
+		} else {
+			hasPendeingAnimation = true;
+		}
 	}
 	
 	public void shutUp() {
 		jokeAnimation.stop();
+		status = READY;
+	}
+	
+	@Override
+	public void onPause() {
+		status = NOT_READY;
+		super.onPause();
 	}
 }
