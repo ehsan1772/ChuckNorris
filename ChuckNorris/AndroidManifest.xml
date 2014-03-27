@@ -30,9 +30,9 @@
             <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
         </activity>
 
-        <service android:name="com.foundation.restful.RestFulDataManager" >
+        <service android:name="data.ChuckRestfulDataManager" >
             <intent-filter>
-                <action android:name="com.foundation.restful.RestFulDataManager" >
+                <action android:name="data.ChuckRestfulDataManager" >
                 </action>
             </intent-filter>
         </service>
