@@ -16,21 +16,30 @@ import android.util.Log;
 import com.ovenbits.chucknorris.MainActivity;
 import com.ovenbits.chucknorris.R;
 
+/**
+ * This class takes care of the notification through AlarmManager and a service that gets called by the alarm manager
+ * @author ehsan.barekati
+ *
+ */
 public class NotificationService extends Service {
-	private final static long day = 24 * 60 * 60 * 1000;
-	private final static long test = 2 * 1000;
 	public final static String TAG = NotificationService.class.getSimpleName();
 
+	/**
+	 * Set's up a timer through AlarmManager to publish a notification
+	 * @param context
+	 * @param hour
+	 * @param minute
+	 */
 	@SuppressLint("NewApi")
-	public static void setTimer(Context context) {
+	public static void setTimer(Context context, int hour, int minute) {
 		Intent intent = new Intent(context, NotificationService.class);
 		intent.setClass(context, NotificationService.class);
 		PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		Calendar cal = Calendar.getInstance();
 
-		cal.set(Calendar.HOUR_OF_DAY, 11);
-		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, minute);
 		cal.set(Calendar.SECOND, 0);
 
 		if (cal.getTimeInMillis() < System.currentTimeMillis()) {
@@ -49,11 +58,14 @@ public class NotificationService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
+	/**
+	 * adds a notification
+	 */
 	private void showNotification() {
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-		builder.setSmallIcon(R.drawable.ic_launcher);
-		builder.setContentTitle("Chuck is knocking...");
-		builder.setContentText("Ready to get hit by a joke?");
+		builder.setSmallIcon(R.drawable.chuck_launcher);
+		builder.setContentTitle(getResources().getString(R.string.notification_title));
+		builder.setContentText(getResources().getString(R.string.notification_text));
 		builder.setAutoCancel(true);
 
 		Intent result = new Intent(this, MainActivity.class);

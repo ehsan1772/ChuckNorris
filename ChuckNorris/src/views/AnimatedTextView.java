@@ -6,6 +6,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.TextView;
 
+/**
+ * A textview with a custom animation that can load a string letter by letter
+ * uses the UI thread handler to update the textview
+ * @author ehsan.barekati
+ *
+ */
 public class AnimatedTextView extends TextView {
 	public static final String TAG = AnimatedTextView.class.getSimpleName();
 	private Handler mainHandler;
@@ -28,8 +34,8 @@ public class AnimatedTextView extends TextView {
 	}
 
 	private void initialize(Context context) {
+		//getting the UI handler
 		mainHandler = new Handler(context.getMainLooper());
-
 	}
 
 	public void setAnimatedText(final String text, final long interval) {
@@ -60,7 +66,6 @@ public class AnimatedTextView extends TextView {
 
 		Thread thread = new Thread(runnable);
 		thread.start();
-
 	}
 
 	private void animationEnded() {
@@ -107,7 +112,6 @@ public class AnimatedTextView extends TextView {
 
 	public interface TextAnimationListener {
 		public void textAnimationStrated();
-
 		public void textAnimationEnded();
 	}
 

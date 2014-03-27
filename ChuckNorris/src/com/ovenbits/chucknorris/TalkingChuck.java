@@ -9,6 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+/**
+ * 
+ * A fragment with one UI component that can talk!
+ * @author ehsan.barekati
+ */
 public class TalkingChuck extends Fragment {
 	public static String TAG = TalkingChuck.class.getSimpleName();
 	ImageView jokeView;
@@ -27,7 +32,6 @@ public class TalkingChuck extends Fragment {
 		Bundle args = new Bundle();
 		// add parameters here
 		f.setArguments(args);
-//		f.setRetainInstance(true);
 		return f;
 	}
 
@@ -48,7 +52,6 @@ public class TalkingChuck extends Fragment {
 		if (hasPendeingAnimation) {
 			talk();
 		}
-
 	}
 
 	public void talk() {

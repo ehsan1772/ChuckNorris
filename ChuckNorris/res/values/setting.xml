@@ -5,10 +5,21 @@
 
     <!-- Animation times -->
     <item name="joke_slie_duration" type="integer">500</item>
-    <item name="joke_in_duration" type="integer">1000</item>
+    <item name="joke_in_duration" type="integer">50</item>
+    
+    <!-- Notification Setting -->
+    <item name="notification_hour" type="integer">11</item>
+    <item name="notification_minute" type="integer">0</item>
+    <string name="notification_title">Chuck is knocking!</string>
+    <string name="notification_text">Ready to get hit by a joke?</string>
 
     <!-- URLs -->
     <string name="joke_count_url">http://api.icndb.com/jokes/count</string>
     <string name="joke_base_url">http://api.icndb.com/jokes/</string>
 
+        <!-- Data Setting -->
+    <item name="thread_pool_size" type="integer">5</item>
+    <item name="cache_size" type="integer">100</item>
+       <item name="download_queue_size" type="integer">500</item>
+    
 </resources>
