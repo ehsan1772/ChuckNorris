@@ -72,6 +72,7 @@ public class TalkingChuck extends Fragment {
 	public void onPause() {
 		Log.d(TAG, "onPause");
 		status = NOT_READY;
+		hasPendeingAnimation = false;
 		super.onPause();
 	}
 	

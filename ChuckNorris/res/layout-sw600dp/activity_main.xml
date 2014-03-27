@@ -11,15 +11,29 @@
         android:layout_height="200dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="150dp"/>
+        android:layout_marginBottom="150dp" />
 
     <RelativeLayout
         android:id="@+id/talk_fragment_container"
         android:layout_width="320dp"
         android:layout_height="460dp"
-        android:layout_alignParentLeft="true"
         android:layout_above="@id/joke_fragment_container"
+        android:layout_alignParentLeft="true"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="50dp"/>
+        android:layout_marginLeft="50dp" />
+
+    <RelativeLayout
+        android:id="@+id/no_connectivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/no_connectivity_background" >
+
+        <TextView
+            style="@style/Connectivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_connectivity" />
+    </RelativeLayout>
 
 </RelativeLayout>

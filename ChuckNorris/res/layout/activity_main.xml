@@ -22,4 +22,18 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="30dp" />
 
+    <RelativeLayout
+        android:id="@+id/no_connectivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/no_connectivity_background" >
+
+        <TextView
+            style="@style/Connectivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_connectivity" />
+    </RelativeLayout>
+
 </RelativeLayout>

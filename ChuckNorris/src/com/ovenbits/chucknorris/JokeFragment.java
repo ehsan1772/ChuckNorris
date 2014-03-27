@@ -49,7 +49,6 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 	
 	private String jokeCountUrl;
 	private String jokeUrl;
-	
 	private String jokeBaseUrl;
 	
 	private BroadcastReceiver notificationReciever;
@@ -82,12 +81,11 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("com.ovenbits.chucknorris.RESULT");
 		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(notificationReciever, filter);
-		if (savedInstanceState == null || savedInstanceState.getInt("KEY") == 0) {
-			fetchData(jokeCountUrl);
-		} else {
+//		if (savedInstanceState == null || savedInstanceState.getInt("KEY") == 0) {
+//			fetchData(jokeCountUrl);
+//		} else {
 			savedInstance = savedInstanceState;
-		}
-
+//		}
 	}
 	
 	public void refresh() {
@@ -131,9 +129,22 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 	public void onResume() {
 		Log.d(TAG, "onResume");
 		super.onResume(); 
+		
+		initiateReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("com.ovenbits.chucknorris.RESULT");
+		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(notificationReciever, filter);
+		
+		if (jokeTextView.getText().length() != 0) {
+			return;
+		}
+		
+		if (savedInstance== null || savedInstance.getInt("KEY") == 0) {
+			fetchData(jokeCountUrl);
+		} 
+		
 		if (slideAnimationStatus == ANIMATION_NOT_STARTED) {
 			slideAnimationStatus = ANIMATION_STARTED;
-			
 			float delta = getResources().getDimension(R.dimen.joke_fragment_width);
 			Animator animator = ObjectAnimator.ofFloat(getView(), View.X, delta, 0);
 			animator.setDuration(slideInDuration);
@@ -187,7 +198,7 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 						jokeUrl= jokeBaseUrl + getRandomInt(jokeCount);
 						fetchData(jokeUrl);
 					}
-					if (!jokeUrl.isEmpty() && refKeyIntent == jokeUrl.hashCode()) {
+					if (jokeUrl != null && !jokeUrl.isEmpty() && refKeyIntent == jokeUrl.hashCode()) {
 						if (joke != getJoke(refKeyIntent)) {
 							refKey = refKeyIntent;
 							joke = getJoke(refKey);
@@ -238,18 +249,20 @@ public class JokeFragment extends Fragment implements AnimatedTextView.TextAnima
 	
 	
 	private void fetchData(String url) {
-		Log.d(TAG, "fetchData");
-		status = STATUS_LOADING;
-		Intent intent = new Intent(getActivity(), RestFulDataManager.class);
-		intent.putExtra(RestFulDataManager.REQUESTED_URL, url);
-		getActivity().startService(intent);
+		if (getActivity() != null) {
+			Log.d(TAG, "fetchData");
+			status = STATUS_LOADING;
+			Intent intent = new Intent(getActivity(), RestFulDataManager.class);
+			intent.putExtra(RestFulDataManager.REQUESTED_URL, url);
+			getActivity().startService(intent);
+		}
 	}
 	
 	@Override
-	public void onDestroy() {
-		Log.d(TAG, "onDestroy");
+	public void onPause() {
+		Log.d(TAG, "onPause");
 		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(notificationReciever);
-		super.onDestroy();
+		super.onPause();
 	}
 	
 	public AnimationListener getListener() {

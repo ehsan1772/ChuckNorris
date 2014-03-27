@@ -7,7 +7,8 @@
     <color name="joke_color">#FF3333</color>
 
 
-    <color name="main_background">#FF9900</color>
-    <color name="joke_fragment_background">#C0C0C0</color>
+    <color name="main_background">#9A6C6C</color>
+    <color name="joke_fragment_background">#B9B060</color>
+    <color name="no_connectivity_background">#C8C8C8AC</color>
 
 </resources>

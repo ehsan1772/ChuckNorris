@@ -11,7 +11,7 @@
         android:layout_height="150dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginBottom="50dp" />
 
     <RelativeLayout
         android:id="@+id/talk_fragment_container"
@@ -19,6 +19,20 @@
         android:layout_height="322dp"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp" />
+
+    <RelativeLayout
+        android:id="@+id/no_connectivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/no_connectivity_background" >
+
+        <TextView
+            style="@style/Connectivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_connectivity" />
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -54,6 +54,7 @@ public class NotificationService extends Service {
 		builder.setSmallIcon(R.drawable.ic_launcher);
 		builder.setContentTitle("Chuck is knocking...");
 		builder.setContentText("Ready to get hit by a joke?");
+		builder.setAutoCancel(true);
 
 		Intent result = new Intent(this, MainActivity.class);
 
